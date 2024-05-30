@@ -110,8 +110,8 @@ const cart = {
             this.deleteGood(id);
         } else {
             goodItem.count--;
+            cartCount.textContent = +cartCount.textContent - 1;
         }
-        cartCount.textContent = +cartCount.textContent - 1;
         setData("cart", this.cartGoods);
         this.cartRender();
     },
@@ -143,7 +143,8 @@ function renderMainScreen() {
     );
     const birthdayBlock = document.createElement("div");
     birthdayBlock.className = "main-slider-block";
-    birthdayBlock.innerHTML = `<div class="main-slider slick-initialized slick-slider">
+    birthdayBlock.innerHTML = `<div class="main-slider slick-initialized slick-slider" 
+    style="width: 100%; display: inline-block; text-align: center">
     <div
         class="slick-slide slick-cloned slick-center"
         data-slick-index="-1"
@@ -151,7 +152,7 @@ function renderMainScreen() {
         tabindex="-1"
     >
         <div>
-            <span style="width: 100%; display: inline-block">
+            <span>
                 <img
                     border="0"
                     src="img/advertise.jpg"
@@ -159,7 +160,7 @@ function renderMainScreen() {
                     height="375"
                     alt="Большой микс"
                     title="Большой микс"
-                    style="float: left"
+                    style="float: right"
                 />
             </span>
         </div>
@@ -240,14 +241,11 @@ document.querySelector(".content").addEventListener("click", (e) => {
 });
 
 document.querySelector(".content").addEventListener("click", (e) => {
-    const target = e.target;
-    if (target.closest(".cart-item-delete")) {
-        cart.deleteGood(target.closest(".cart-item-delete").dataset.id);
-    } else if (target.closest(".change-quantity-minus")) {
-        cart.minusGood(target.closest(".change-quantity-minus").dataset.id);
-    } else if (target.closest(".change-quantity-plus")) {
-        cart.plusGood(target.closest(".change-quantity-plus").dataset.id);
-    }
+    const cur = [e.target.closest(".cart-item-delete"), e.target.closest(".change-quantity-minus"), 
+    e.target.closest(".change-quantity-plus")]
+    cur[0] ? cart.deleteGood(cur[0].dataset.id) : 
+    cur[1] ? cart.minusGood(cur[1].dataset.id) :
+    cart.plusGood(cur[2].dataset.id); 
 });
 
 navigationItems.forEach((item) => {
